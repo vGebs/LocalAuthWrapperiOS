@@ -9,7 +9,7 @@ import SwiftUI
 
 @available(iOS 13.0.0, *)
 struct ContentView: View {
-    @ObservedObject var appState = AppState.shared
+    @ObservedObject var appState = AppState2.shared
     
     var body: some View {
         ZStack {

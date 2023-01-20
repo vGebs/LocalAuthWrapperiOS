@@ -23,11 +23,17 @@ You can install `LocalAuthWrapperiOS` using the [Swift Package Manager](https://
 
 ## Usage
 
+### Face ID Usage Description
+
+Make sure to add a usage description for `Privacy - Face ID Usage Description` 
+
+### Initialization
+
 To use the `LocalAuth` class, you need to create an instance of LAContext and pass it to the LocalAuth class.
 
 ```swift
 let context = LAContext()
-let auth = LocalAuth(context: context)
+let localAuth = LocalAuth(context: context)
 ```
 
 You can further tune the LAContext() object if necessary.
@@ -37,13 +43,30 @@ You can further tune the LAContext() object if necessary.
 You can authenticate a user using Face ID, Touch ID, or Passphrase by calling the authenticateUser(reason:completion:) function. 
 
 ```swift
-auth.authenticateUser(reason: "Reason for authentication") { (success, error) in
+localAuth.authenticateUser(reason: "Please login to continue") { [weak self] success, error in
     if success {
-        // Authentication successful
-        print("Authentication successful")
+        // Success
     } else {
-        // Authentication failed
-        print("Authentication failed")
+        if let error = error {
+            switch error {
+            case LAError.userCancel:
+                print("Authentication was cancelled by user.")
+            case LAError.authenticationFailed:
+                print("Authentication failed.")
+            case LAError.passcodeNotSet:
+                print("A passcode has not been set.")
+            case LAError.systemCancel:
+                print("Authentication was cancelled by the system.")
+            case LAError.biometryNotAvailable:
+                print("Biometry is not available.")
+            case LAError.biometryNotEnrolled:
+                print("Biometry has no enrolled identities.")
+            default:
+                print("Authentication failed with error: \(error)")
+            }
+        } else {
+            print("Auth Failed")
+        }
     }
 }
 ```

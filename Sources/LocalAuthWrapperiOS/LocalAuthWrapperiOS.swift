@@ -10,7 +10,7 @@ public enum BiometryType {
 public class LocalAuth {
     
     private var context: LAContext
-    var biometryType: BiometryType?
+    private var biometryType: BiometryType?
     
     public init(context: LAContext) {
         self.context = context
